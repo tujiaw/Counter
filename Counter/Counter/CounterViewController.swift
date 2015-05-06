@@ -124,6 +124,11 @@ class CounterViewController: UIViewController {
     
     func startStopButtonTapped(sender: UIButton) {
         isStart = !isStart
+        if isStart {
+            createAndFireLocalNotificationAfterSeconds(remainingSeconds)
+        } else {
+            UIApplication.sharedApplication().cancelAllLocalNotifications()
+        }
     }
     
     func clearButtonTapped(sender: UIButton) {
@@ -147,5 +152,14 @@ class CounterViewController: UIViewController {
     func enabledButton(button: UIButton, enabled: Bool) {
         button.enabled = enabled
         button.alpha = enabled ? 1.0 : 0.3
+    }
+    
+    func createAndFireLocalNotificationAfterSeconds(seconds: Int) {
+        UIApplication.sharedApplication().cancelAllLocalNotifications()
+        let notification = UILocalNotification()
+        notification.fireDate = NSDate(timeIntervalSinceNow: Double(seconds))
+        notification.timeZone = NSTimeZone.systemTimeZone()
+        notification.alertBody = "计时完成!"
+        UIApplication.sharedApplication().scheduleLocalNotification(notification)
     }
 }
